@@ -6,11 +6,11 @@ Team Members and Roles:
 
 Weisheng Zhang - Users Guru: Responsible for user management, authentication, and overall user experience.
 
-Zhixuanlu - Products Guru: Manages product listings, descriptions, and product-related functionalities.
+Zhixuan Lu - Products Guru: Manages product listings, descriptions, and product-related functionalities.
 
 Jiaojiao Zhao - Carts Guru: Oversees cart functionalities, including adding, updating, and removing items.
 
-Shu pu - Sellers Guru: Manages seller-related tasks, including seller onboarding, product management, and interactions.
+Shu Pu - Sellers Guru: Manages seller-related tasks, including seller onboarding, product management, and interactions.
 
 Shanruo Xu - Social Guru: Handles social features, including user posts, comments, and community engagement.
 
