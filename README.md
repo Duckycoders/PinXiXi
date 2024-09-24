@@ -20,7 +20,7 @@ Shanruo Xu - Social Guru: Handles social features, including user posts, comment
 
 Summary of Contributions Since the Last Milestone:
 
-Weisheng Zhang (Users Guru): Improved user registration and login processes, added new user profile customization options, and resolved issues with session persistence. 
+Weisheng Zhang (Users Guru): Brainstormed and identified the tables and related attributes corresponding to the users part of the project.
 
 Zhixuanlu (Products Guru): Enhanced product categorization, implemented advanced search filters, and optimized the product display layout for better user experience.
 
