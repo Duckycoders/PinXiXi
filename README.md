@@ -24,7 +24,7 @@ Weisheng Zhang (Users Guru): Brainstormed and identified the tables and related 
 
 Zhixuanlu (Products Guru): Enhanced product categorization, implemented advanced search filters, and optimized the product display layout for better user experience.
 
-Jiaojiao Zhao (Carts Guru): Updated cart functionalities to support batch operations, fixed checkout process bugs, and enhanced the overall cart interface design.
+Jiaojiao Zhao (Carts Guru): Oversees cart functionalities, including adding, updating, and removing items, and connect customers, sellers and the webpage timely.
 
 Shupu (Sellers Guru): Developed new features for the seller dashboard, integrated seller analytics, and streamlined the product listing and approval workflows.
 
