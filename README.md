@@ -26,7 +26,7 @@ Zhixuanlu (Products Guru): Enhanced product categorization, implemented advanced
 
 Jiaojiao Zhao (Carts Guru): Oversees cart functionalities, including adding, updating, and removing items, and connect customers, sellers and the webpage timely.
 
-Shupu (Sellers Guru): Developed new features for the seller dashboard, integrated seller analytics, and streamlined the product listing and approval workflows.
+Shupu (Sellers Guru): Enable sellers to update stock, add/remove products, and fulfill orders. Ensure accurate inventory tracking when orders are placed and work with the team to integrate these features smoothly into the system.
 
 Shanruo Xu (Social Guru): Implemented social posting capabilities, added commenting features, and improved the notification system for user interactions.
 
