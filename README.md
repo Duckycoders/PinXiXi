@@ -22,11 +22,11 @@ Summary of Contributions Since the Last Milestone:
 
 Weisheng Zhang (Users Guru): Brainstormed and identified the tables and related attributes，that will be used to handle the functionalities related to the Users section of the project.
 
-Zhixuanlu (Products Guru): Enhanced product categorization, implemented advanced search filters, and optimized the product display layout for better user experience.
+Zhixuan Lu (Products Guru): The Product table manages information about products, such as their names, descriptions, categories, and prices, enabling the platform to organize, display, and categorize items for sale.
 
 Jiaojiao Zhao (Carts Guru): Oversees cart functionalities, including adding, updating, and removing items, and connect customers, sellers and the webpage timely.
 
-Shupu (Sellers Guru): Enable sellers to update stock, add/remove products, and fulfill orders. Ensure accurate inventory tracking when orders are placed and work with the team to integrate these features smoothly into the system.
+Shu Pu (Sellers Guru): Enable sellers to update stock, add/remove products, and fulfill orders. Ensure accurate inventory tracking when orders are placed and work with the team to integrate these features smoothly into the system.
 
 Shanruo Xu (Social Guru): Implemented social posting capabilities, added commenting features, and improved the notification system for user interactions.
 
