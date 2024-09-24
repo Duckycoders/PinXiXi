@@ -13,6 +13,8 @@ Jiaojiao Zhao - Carts Guru: Oversees cart functionalities, including adding, upd
 Shu pu - Sellers Guru: Manages seller-related tasks, including seller onboarding, product management, and interactions.
 
 Shanruo Xu - Social Guru: Handles social features, including user posts, comments, and community engagement.
+
+
 Project Option: We have chosen the standard project option.
 
 Summary of Contributions Since the Last Milestone:
