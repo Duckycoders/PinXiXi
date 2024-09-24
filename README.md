@@ -1,6 +1,6 @@
 # PinXiXi
 Class project for CS316
-Team Name: PinXiXi
+Team Name: PinXiXi 拼夕夕
 
 Team Members and Roles:
 
