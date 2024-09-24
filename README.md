@@ -1,5 +1,7 @@
 # PinXiXi
 Class project for CS316
+
+Our choice: Standard Project Option
 Team Name: PinXiXi 拼夕夕
 
 Team Members and Roles:
@@ -15,7 +17,6 @@ Shu Pu - Sellers Guru: Manages seller-related tasks, including seller onboarding
 Shanruo Xu - Social Guru: Handles social features, including user posts, comments, and community engagement.
 
 
-Project Option: We have chosen the standard project option.
 
 Summary of Contributions Since the Last Milestone:
 
