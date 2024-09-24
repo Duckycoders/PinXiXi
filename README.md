@@ -26,3 +26,5 @@ Jiaojiao Zhao (Carts Guru): Updated cart functionalities to support batch operat
 Shupu (Sellers Guru): Developed new features for the seller dashboard, integrated seller analytics, and streamlined the product listing and approval workflows.
 
 Shanruo Xu (Social Guru): Implemented social posting capabilities, added commenting features, and improved the notification system for user interactions.
+
+Respiratory link: https://github.com/Duckycoders/PinXiXi
