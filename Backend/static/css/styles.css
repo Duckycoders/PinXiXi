@@ -1,0 +1,56 @@
+/* static/css/styles.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 15px 20px;
+}
+
+.container {
+    padding: 20px;
+}
+
+h1, h2 {
+    margin: 0 0 20px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    margin-right: 10px;
+}
+
+input[type="number"] {
+    width: 200px;
+    padding: 5px;
+}
+
+button {
+    padding: 5px 10px;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+#reviewsContainer ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#reviewsContainer li {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+#reviewsContainer li:last-child {
+    border-bottom: none;
+}
