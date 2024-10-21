@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Seller Inventory and Orders Management</title>
+        <style>
+            /* 基本页面样式 */
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            h1, h2 {
+                text-align: center;
+            }
+
+            /* 卖家选择下拉框样式 */
+            #sellerSelect {
+                width: 50%;
+                padding: 10px;
+                margin: 20px auto;
+                display: block;
+            }
+
+            /* 表格样式 */
+            table {
+                width: 90%;
+                margin: 20px auto;
+                border-collapse: collapse;
+                border: 1px solid #000;
+            }
+
+            th, td {
+                padding: 8px;
+                text-align: left;
+                border: 1px solid #000;
+            }
+
+            /* 按钮样式 */
+            .button {
+                padding: 5px 10px;
+                border: 1px solid #000;
+                background-color: #fff;
+                cursor: pointer;
+            }
+
+            .button:hover {
+                background-color: #ddd;
+            }
+
+            .delete-button {
+                background-color: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <h1>Seller Inventory and Orders Management</h1>
+        
+        <!-- 卖家选择 -->
+        <h2>Select Seller</h2>
+        <select id="sellerSelect"></select>
+        
+        <!-- 库存表格 -->
+        <h2>Inventory</h2>
+        <table id="inventoryTable">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Stock Quantity</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="inventoryBody"></tbody>
+        </table>
+        
+        <!-- 订单表格 -->
+        <h2>Orders</h2>
+        <table id="orderTable">
+            <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Buyer</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="orderBody"></tbody>
+        </table>
+        
+        <script>
+            let selectedSellerId;
+
+            // Fetch sellers
+            async function fetchSellers() {
+                const response = await fetch(`/api/seller/search`);
+                const sellers = await response.json();
+                const sellerSelect = document.getElementById('sellerSelect');
+                sellerSelect.innerHTML = sellers.map(seller => `
+            <option value="${seller.id}">${seller.name}</option>
+        `).join('');
+
+                // 自动选择第一个卖家并加载数据
+                selectedSellerId = sellers[0].id;
+                fetchInventory(selectedSellerId);
+                fetchOrders(selectedSellerId);
+                fetchInventory(selectedSellerId);
+
+                // 切换卖家时更新数据
+                sellerSelect.addEventListener('change', function () {
+                    selectedSellerId = this.value;
+                    fetchInventory(selectedSellerId);
+                    fetchOrders(selectedSellerId);
+                    fetchInventory(selectedSellerId);
+                });
+            }
+
+            // Fetch inventory for the selected seller
+            async function fetchInventory(sellerId) {
+                const response = await fetch(`/api/products/seller/${sellerId}`);
+                const products = await response.json();
+                const inventoryBody = document.getElementById('inventoryBody');
+                inventoryBody.innerHTML = products.map(product => `
+            <tr>
+                <td>${product.name}</td>
+                <td><input type="number" value="${product.stockQuantity}" id="quantity-${product.id}"></td>
+                <td>
+                    <button class="button" onclick="updateInventory(${product.id})">Update</button>
+                    <button class="button delete-button" onclick="deleteProduct(${product.id})">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+            }
+
+            // Fetch orders for the selected seller
+            async function fetchOrders(sellerId) {
+                const response = await fetch(`/api/seller/orders/${sellerId}`);
+                const orders = await response.json();
+                const orderBody = document.getElementById('orderBody');
+                orderBody.innerHTML = orders.map(order => `
+            <tr>
+                <td>${order.id}</td>
+                <td>${order.buyerName}</td>
+                <td>${order.totalAmount}</td>
+                <td>${order.status}</td>
+                <td>
+                    <button class="button" onclick="markOrderComplete(${order.id})" ${order.status === 'completed' ? 'disabled' : ''}>Mark Complete</button>
+                </td>
+            </tr>
+        `).join('');
+            }
+
+            // Update product inventory
+            async function updateInventory(productId) {
+                const quantity = document.getElementById(`quantity-${productId}`).value;
+                const response = await fetch(`/api/products/update/${productId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ quantity: quantity })
+                });
+                if (response.ok) {
+                    alert('Inventory updated successfully');
+                    fetchInventory(selectedSellerId); // Refresh inventory
+                }
+            }
+
+            // Delete product from inventory
+            async function deleteProduct(productId) {
+                const response = await fetch(`/api/products/${productId}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    alert('Product deleted successfully');
+                    fetchInventory(selectedSellerId); // Refresh inventory
+                }
+            }
+
+            // Mark order as complete
+            async function markOrderComplete(orderId) {
+                const response = await fetch(`/api/seller/orders/complete/${orderId}`, {
+                    method: 'POST'
+                });
+                if (response.ok) {
+                    alert('Order marked as complete');
+                    fetchOrders(selectedSellerId); // Refresh orders
+                }
+            }
+
+            // Initialize the page by fetching sellers
+            fetchSellers();
+        </script>
+    
+    </body>
+</html>

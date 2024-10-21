@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- src/main/resources/mapper/UserMapper.xml -->
+<mapper namespace="com.example.mini_amazon.mapper.UserMapper">
+    <insert id="register" parameterType="com.example.mini_amazon.model.User">
+        INSERT INTO users(email, name, address, password)
+        VALUES(#{email}, #{name}, #{address}, #{password})
+    </insert>
+
+    <select id="login" resultType="com.example.mini_amazon.model.User">
+        SELECT * FROM users WHERE email = #{email} AND password = #{password}
+    </select>
+
+    <select id="findById" resultType="com.example.mini_amazon.model.User">
+        SELECT * FROM users WHERE id = #{id}
+    </select>
+
+    <update id="updateUser" parameterType="com.example.mini_amazon.model.User">
+        UPDATE users
+        SET email=#{email}, name=#{name}, address=#{address}
+        WHERE id=#{id}
+    </update>
+
+    <select id="getPurchaseHistory" resultType="com.example.mini_amazon.model.Purchase">
+        SELECT * FROM purchases WHERE user_id = #{userId} ORDER BY purchase_date DESC
+    </select>
+</mapper>
