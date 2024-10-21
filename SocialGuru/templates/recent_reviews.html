@@ -1,0 +1,15 @@
+<!-- templates/recent_reviews.html -->
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>Recent Reviews</h2>
+        <form id="reviewForm">
+            <label for="userIdInput">User ID:</label>
+            <input type="number" id="userIdInput" name="userId" min="1" required>
+            <button type="submit">Get Recent Reviews</button>
+        </form>
+        <div id="message"></div>
+        <div id="reviewsContainer"></div>
+    </div>
+{% endblock %}
