@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <title>User Registration</title>
+        <link rel="stylesheet" href="/css/login.css">
+    </head>
+    <body>
+        <div class="login-container">
+            <h1>Register</h1>
+            <form action="/api/users/register" method="post">
+                <div>
+                    <label for="email">Email：</label>
+                    <input id="email" name="email" type="email" placeholder="Email" required>
+                </div>
+                <div>
+                    <label for="Full Name">Full Name：</label>
+                    <input id="Full Name" name="name" type="text" placeholder="Full Name" required>
+                </div>
+                <div>
+                    <label for="address">Address：</label>
+                    <input id="address" name="address" type="text" placeholder="Address" required>
+                </div>
+                <div>
+                    <label for="password">Password：</label>
+                    <input type="password" placeholder="Password" id="password" name="password" required/>
+                </div>
+                <div>
+                    <input type="submit" value="Register"/>
+                </div>
+                <!-- 错误信息显示 -->
+                <div class="error" th:if="${param.error}">
+                    <p th:text="'Registration failed：'+${param.error}"></p>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

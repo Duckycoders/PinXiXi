@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mini Amazon</title>
+        <style>
+            /* 背景设置 */
+            body {
+                font-family: Arial, sans-serif;
+                background: linear-gradient(to right, #6a11cb, #2575fc);
+                color: #333;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            /* 容器设置 */
+            .container {
+                width: 80%;
+                max-width: 600px;
+                text-align: center;
+                background: #ffffff;
+                border-radius: 10px;
+                padding: 30px;
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            }
+
+            h1 {
+                color: #333;
+                font-size: 2.5rem;
+                margin-bottom: 20px;
+            }
+
+            /* 按钮样式 */
+            .navigation-buttons {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            button {
+                background-color: #2575fc;
+                color: #fff;
+                font-size: 1.1rem;
+                padding: 15px 20px;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: 0.3s;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            button:hover {
+                background-color: #1a61c2;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            }
+
+            /* 图标样式 */
+            .icon {
+                font-size: 1.2rem;
+            }
+
+            /* 登出按钮样式及定位 */
+            .logout-button {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background-color: #f44336;
+                color: #fff;
+                font-size: 1rem;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: 0.3s;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
+
+            .logout-button:hover {
+                background-color: #d32f2f;
+                transform: translateY(-2px);
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div class="container">
+            <h1>Mini Amazon</h1>
+            <div class="navigation-buttons">
+                <button onclick="window.location.href = '/products';">
+                    <span class="icon">📦</span> Products
+                </button>
+                <button onclick="window.location.href = '/cart';">
+                    <span class="icon">🛒</span> Cart
+                </button>
+                <button onclick="window.location.href = '/inventoryOrderManage';">
+                    <span class="icon">📋</span> Inventory Order Manage
+                </button>
+                <button onclick="window.location.href = '/productReview';">
+                    <span class="icon">⭐</span> Product Review
+                </button>
+                <button onclick="window.location.href = '/userReview';">
+                    <span class="icon">🧑‍💼</span> User Review
+                </button>
+                <button onclick="window.location.href = '/userOrder';">
+                    <span class="icon">📄</span> User Order
+                </button>
+            </div>
+        </div>
+        
+        <!-- 登出按钮 -->
+        <button class="logout-button" onclick="logout()">
+            <span class="icon">🚪</span> Logout
+        </button>
+        
+        <script>
+            async function logout() {
+                try {
+                    const response = await fetch('/api/users/logout');
+                    if (response.ok) {
+                        // 跳转到'/'页面
+                        window.location.href = '/';
+                    } else {
+                        alert('Logout failed:');
+                    }
+                } catch (error) {
+                    console.error('Error during logout:', error);
+                }
+            }
+        </script>
+    </body>
+</html>

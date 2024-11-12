@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- src/main/resources/mapper/UserMapper.xml -->
+<mapper namespace="com.example.mini_amazon.mapper.UserMapper">
+    <select id="getPurchaseHistory" resultType="com.example.mini_amazon.model.Purchase">
+        SELECT * FROM purchases WHERE user_id = #{userId} ORDER BY purchase_date DESC
+    </select>
+</mapper>

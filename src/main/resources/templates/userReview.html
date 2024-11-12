@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Reviews</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 20px;
+            }
+
+            h1 {
+                text-align: center;
+                color: #333;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                background-color: #fff;
+            }
+
+            th,
+            td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            th {
+                background-color: #f8f8f8;
+            }
+
+            tr:hover {
+                background-color: #f1f1f1;
+            }
+
+            @media (max-width: 768px) {
+                table {
+                    width: 100%;
+                    display: block;
+                    overflow-x: auto;
+                }
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .no-reviews {
+                text-align: center;
+                color: #777;
+                font-size: 18px;
+                margin-top: 40px;
+            }
+
+            button {
+                padding: 8px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-right: 5px;
+            }
+
+            button.helpful {
+                background-color: #007BFF;
+                color: white;
+            }
+
+            button.not-helpful {
+                background-color: #FF5733;
+                color: white;
+            }
+
+            button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        </style>
+    </head>
+    
+    <body>
+        
+        <div class="container">
+            <h1>All Product Reviews</h1>
+            
+            <table id="reviewsTable" border="1" cellpadding="10" cellspacing="0">
+                <tbody id="reviewsTableBody">
+                </tbody>
+            </table>
+            
+            <div class="no-reviews" id="noReviewsMessage" style="display: none;">
+                You haven't submitted any reviews yet.
+            </div>
+        </div>
+        
+        <script>
+            // 当页面加载时获取评论信息
+            async function loadUserReviews() {
+                try {
+                    const response = await fetch('/api/users/allReviews');
+                    const reviews = await response.json();
+                    const reviewsTableBody = document.getElementById('reviewsTableBody');
+                    const noReviewsMessage = document.getElementById('noReviewsMessage');
+
+                    if (reviews.length === 0) {
+                        noReviewsMessage.style.display = 'block';
+                        reviewsTableBody.innerHTML = '';
+                    } else {
+                        noReviewsMessage.style.display = 'none';
+
+                        const groupedReviews = groupByProduct(reviews);
+                        const tableRows = [];
+                        for (const productName in groupedReviews) {
+                            const productReviews = groupedReviews[productName];
+                            tableRows.push(`<tr><td colspan="5"><h2>${productName}</h2></td></tr>`);
+                            tableRows.push(`<thead>
+                                        <tr>
+                                            <th>Comment</th>
+                                            <th>Rating</th>
+                                            <th>Review Time</th>
+                                            <th>Number of likes</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>`);
+                            productReviews.forEach(review => {
+                                let buttonHtml = '';
+                                if (review.helpfulType === '0') {
+                                    buttonHtml = `<button class="helpful" onclick="markHelpful(${review.id})">Helpful</button><button class="not-helpful" onclick="markNotHelpful(${review.id})">UnHelpful</button>`;
+                                } else if (review.helpfulType === '1') {
+                                    buttonHtml = `<button class="not-helpful" onclick="markNotHelpful(${review.id})">UnHelpful</button>`;
+                                } else if (review.helpfulType === '2') {
+                                    buttonHtml = `<button class="helpful" onclick="markHelpful(${review.id})">Helpful</button>`;
+                                }
+                                tableRows.push(`
+                                <tr>
+                                    <td>${review.comment}</td>
+                                    <td>${review.rating}</td>
+                                    <td>${review.reviewTime}</td>
+                                    <td>${review.helpfulnessCount}</td>
+                                    <td>
+                                        ${buttonHtml}
+                                    </td>
+                                </tr>
+                            `);
+                            });
+                        }
+                        reviewsTableBody.innerHTML = tableRows.join('');
+                    }
+                } catch (error) {
+                    console.error('Error loading reviews:', error);
+                }
+            }
+
+            function groupByProduct(reviews) {
+                const grouped = {};
+                reviews.forEach(review => {
+                    const productName = review.productName || '未知产品'; // 如果没有productName属性，设置一个默认值
+                    if (!grouped[productName]) {
+                        grouped[productName] = [];
+                    }
+                    grouped[productName].push(review);
+                });
+                return grouped;
+            }
+
+            // 标记评论为有帮助
+            async function markHelpful(reviewId, isAlreadyHelpful) {
+                try {
+                    if (!isAlreadyHelpful) {
+                        await fetch(`/api/reviews/${reviewId}/helpful`, {method: 'POST'});
+                    }
+                    loadUserReviews();
+                } catch (error) {
+                    console.error('Error marking review as helpful:', error);
+                }
+            }
+
+            // 标记评论为无帮助
+            async function markNotHelpful(reviewId, isAlreadyHelpful) {
+                try {
+                    if (!isAlreadyHelpful) {
+                        await fetch(`/api/reviews/${reviewId}/not-helpful`, {method: 'POST'});
+                    }
+                    loadUserReviews();
+                } catch (error) {
+                    console.error('Error marking review as not helpful:', error);
+                }
+            }
+
+            // 页面加载时调用
+            window.onload = loadUserReviews;
+        </script>
+    
+    </body>
+
+</html>

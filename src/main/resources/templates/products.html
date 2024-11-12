@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Products</title>
+        <link rel="stylesheet" href="/css/products.css">
+    </head>
+    
+    <body>
+        <header>
+            <div class="header-content">
+                <button class="back-to-menu" onclick="window.location.href='menu';"><- Back To Menu</button>
+                <h1>Products</h1>
+            </div>
+        </header>
+        
+        <main>
+            <section class="filters-section">
+                <div style="margin-bottom: 20px">
+                    <h2>Select Seller</h2>
+                    <div class="form-control">
+                        <select id="sellerSelect"></select>
+                    </div>
+                </div>
+                <div class="search-filter-sort">
+                    <label for="search">Search Info:</label>
+                    <input type="text" id="search" placeholder="Search products by name or description...">
+                    <label for="categoryFilter">Category:</label>
+                    <select id="categoryFilter" onchange="filterByCategory()">
+                        <option value="">All Categories</option>
+                    </select>
+                    <label for="priceSort">Sort by Price:</label>
+                    <select id="priceSort" onchange="sortProductsByPrice()">
+                        <option value="none">None</option>
+                        <option value="asc">Low to High</option>
+                        <option value="desc">High to Low</option>
+                    </select>
+                    <label for="priceLess">Price Less Than:</label>
+                    <input type="text" id="priceLess" placeholder="Please Input Price">
+                    <button onclick="searchProducts()">Search</button>
+                    <button style="margin-left: 20px" onclick="openProductModal()">Create Product</button>
+                </div>
+            </section>
+            
+            <section class="pagination-section">
+                <button onclick="prevPage()">Previous Page</button>
+                <span id="currentPage">1</span> / <span id="totalPages">0</span>
+                <button onclick="nextPage()">Next Page</button>
+            </section>
+            
+            <section class="product-list-section">
+                <h2>Product List</h2>
+                <div id="productList" class="product-list"></div>
+            </section>
+        </main>
+        
+        <!-- Product Details Modal -->
+        <div id="productDetailsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeProductDetailsModal()">&times;</span>
+                <h2 id="productName"></h2>
+                <img id="productImage" alt="Product Image">
+                <p id="productDescription"></p>
+                <p>Price: $<span id="productPrice"></span></p>
+                <p>Average Rating: <span id="productAverageRating"></span></p>
+                <h3>Sellers</h3>
+                <ul id="sellerList"></ul>
+                <h3>Reviews</h3>
+                <div id="reviewList"></div>
+            </div>
+        </div>
+        
+        <!-- Create/Edit Product Modal (Reusable) -->
+        <div id="productModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeProductModal()">&times;</span>
+                <h2 id="modalTitle"></h2>
+                <label for="productNameInput">Product Name:</label>
+                <input type="text" id="productNameInput">
+                <label for="productDescriptionInput">Description:</label>
+                <textarea id="productDescriptionInput"></textarea>
+                <label for="productPriceInput">Price:</label>
+                <input type="number" id="productPriceInput">
+                <label for="productQuantityInput">Quantity:</label>
+                <input type="number" id="productQuantityInput">
+                <label for="productCategoryInput">Category:</label>
+                <select id="productCategoryInput" required>
+                </select>
+                <!--<label for="productImageUrlInput">Image URL:</label>-->
+                <!--<input type="text" id="productImageUrlInput">-->
+                <!-- 改为文件上传的形式 -->
+                <label for="productImageInput">Upload Image:</label>
+                <input type="file" id="productImageInput" accept="image/*">
+                <img id="productPreview" src="" alt="Product Image" style="max-width: 100px; display: none;">
+                <button onclick="saveProduct()">Save</button>
+            </div>
+        </div>
+        
+        <script>
+            let products = [];
+            let editingProductId = null;
+            let selectedSellerId;
+            let currentPage = 1;
+            let itemsPerPage = 10;
+            let totalPages = 0;
+            let searchKeyword = '';
+
+            // Fetch sellers
+            async function fetchSellers() {
+                const response = await fetch(`/api/seller/search`);
+                const sellers = await response.json();
+                const sellerSelect = document.getElementById('sellerSelect');
+                sellerSelect.innerHTML = sellers.map(seller => `
+                <option value="${seller.id}">${seller.name}</right>
+            `).join('');
+
+                // Automatically set the first seller as selected and load related data
+                selectedSellerId = sellers[0].id;
+                // fetchInventory(selected);
+                // fetchOrders(selectedSellerId);
+
+                // Handle seller change
+                sellerSelect.addEventListener('change', function () {
+                    selectedSellerId = this.value;
+                    searchProducts();
+                    // fetchInventory(selectedSellerId);
+                    // fetchOrders(selectedSellerId);
+                });
+            }
+
+            async function loadCategories() {
+                try {
+                    const response = await fetch('/api/categories');
+                    const categories = await response.json();
+                    const categorySelect = document.getElementById('productCategoryInput');
+                    const categoryFilterSelect = document.getElementById('categoryFilter');
+
+                    let content = categories.map(category => `
+                    <option value="${category.id}">${category.name}</right>
+                `).join('');
+                    categorySelect.innerHTML = content;
+                    categoryFilterSelect.innerHTML += content;
+                } catch (error) {
+                    console.error('Error fetching categories:', error);
+                }
+            }
+
+            function displayProducts(products) {
+                const productList = document.getElementById('productList');
+                productList.innerHTML = '';
+                products.forEach(product => {
+                    const productDiv = document.createElement('div');
+                    productDiv.className = 'product-summary';
+                    productDiv.innerHTML = `
+                        <img style="width: 200px; height: 200px" src="data:image/jpg;base64,${product.image}" alt="${product.name}">
+                        <div style="margin-top: 10px;height: 150px">
+                            <h3>${product.name}</h3>
+                            <p>${product.description}</h3>
+                            <p>Price: $${product.price}</h3>
+                        </div>
+                        <div>
+                            <button onclick="openProductModal(${product.id})">Edit</button>
+                            <button onclick="deleteProduct(${product.id})">Delete</button>
+                            <button onclick="addToCart(${product.id}, ${product.price}, '${product.name}')">Add to Cart</button>
+                        </div>
+                    `;
+                    productList.appendChild(productDiv);
+                });
+            }
+
+            // Open the modal for creating/editing products
+            function openProductModal(productId = null) {
+                const modalTitle = document.getElementById('modalTitle');
+                const productPreview = document.getElementById('productPreview');
+
+                if (productId) {
+                    // 编辑模式，获取产品数据
+                    editingProductId = productId;
+                    const product = products.find(p => p.id === productId);
+                    document.getElementById('productNameInput').value = product.name;
+                    document.getElementById('productDescriptionInput').value = product.description;
+                    document.getElementById('productPriceInput').value = product.price;
+                    document.getElementById('productQuantityInput').value = product.quantity;
+                    document.getElementById('productCategoryInput').value = product.categoryId;
+
+                    // 设置图片预览
+                    if (product.image) {
+                        productPreview.src = 'data:image/jpg;base64,' + product.image;
+                        productPreview.style.display = 'block';
+                    } else {
+                        productPreview.style.display = 'none';
+                    }
+
+                    modalTitle.innerText = 'Edit Product';
+                } else {
+                    // 新建模式
+                    editingProductId = null;
+                    document.getElementById('productNameInput').value = '';
+                    document.getElementById('productDescriptionInput').value = '';
+                    document.getElementById('productPriceInput').value = '';
+                    document.getElementById('productQuantityInput').value = '';
+                    document.getElementById('productCategoryInput').value = '1';
+                    document.getElementById('productImageInput').value = '';
+
+                    productPreview.style.display = 'none';
+                    productPreview.src = '';
+                    modalTitle.innerText = 'Create New Product';
+                }
+
+                document.getElementById('productModal').style.display = 'block';
+            }
+
+
+            // Close the product modal
+            function closeProductModal() {
+                document.getElementById('productModal').style.display = 'none';
+            }
+
+            async function saveProduct() {
+                const formData = new FormData();
+                if (!document.getElementById('productCategoryInput').value) {
+                    alert('Please select a category.');
+                    return;
+                }
+                formData.append('name', document.getElementById('productNameInput').value);
+                formData.append('description', document.getElementById('productDescriptionInput').value);
+                formData.append('price', document.getElementById('productPriceInput').value);
+                formData.append('quantity', document.getElementById('productQuantityInput').value ? document.getElementById('productQuantityInput').value : 0);
+                formData.append('categoryId', document.getElementById('productCategoryInput').value);
+                // formData.append('sellerId', selectedSellerId);
+                const productImageInput = document.getElementById('productImageInput');
+                if (productImageInput.files.length > 0) {
+                    formData.append('image', productImageInput.files[0]);
+                    formData.append('imageUrl', productImageInput.files[0].name);
+                }
+                if (editingProductId) {
+                    formData.append('id', editingProductId);
+                }
+                await fetch('/api/products', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                searchProducts();
+                closeProductModal();
+            }
+
+
+            // View product details
+            function viewProduct(productId) {
+                const product = products.find(p => p.id === productId);
+                document.getElementById('productName').innerText = product.name;
+                document.getElementById('productImage').src = product.imageUrl;
+                document.getElementById('productDescription').innerText = product.description;
+                document.getElementById('productPrice').innerText = product.price;
+                document.getElementById('productAverageRating').innerText = product.averageRating;
+
+                const sellerList = document.getElementById('sellerList');
+                sellerList.innerHTML = '';
+                product.sellers.forEach(seller => {
+                    const li = document.createElement('li');
+                    li.innerText = seller.name;
+                    sellerList.appendChild(li);
+                });
+
+                const reviewList = document.getElementById('reviewList');
+                reviewList.innerHTML = '';
+                product.reviews.forEach(review => {
+                    const reviewDiv = document.createElement('div');
+                    reviewDiv.innerHTML = `<strong>${review.userName}:</strong> ${review.content} <em>${review.rating} stars</em>`;
+                    reviewList.appendChild(reviewDiv);
+                });
+
+                document.getElementById('productDetailsModal').style.display = 'block';
+            }
+
+            // Close product details modal
+            function closeProductDetailsModal() {
+                document.getElementById('productDetailsModal').style.display = 'none';
+            }
+
+            // Add product to cart
+            async function addToCart(productId, price, productName) {
+                const cartItem = {
+                    productId,
+                    productName,
+                    sellerId: 1,
+                    quantity: 1,
+                    price
+                };
+
+                try {
+                    await fetch('/api/carts/items', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(cartItem)
+                    });
+                    alert(`${productName} has been added to your cart.`);
+                } catch (error) {
+                    console.error('Error adding product to cart:', error);
+                }
+            }
+
+            // Delete a product (optional, if you implement deletion)
+            async function deleteProduct(productId) {
+                if (confirm("Are you sure you want to delete this product?")) {
+                    await fetch(`/api/products/${productId}`, {method: 'DELETE'});
+                    searchProducts();
+                }
+            }
+
+            function searchProducts() {
+                searchKeyword = document.getElementById('search').value.toLowerCase();
+
+                const price = document.getElementById('priceLess').value;
+                const priceLimit = price? parseFloat(price) : Infinity;
+                debugger
+                // 构建搜索请求的URL，包含关键词、页码和每页记录数
+                const searchUrl = `/api/products/search?keyword=${searchKeyword}&sellerId=${selectedSellerId}&page=${currentPage}&limit=${itemsPerPage}`;
+
+                fetch(searchUrl)
+                    .then(response => response.json())
+                    .then(result => {
+                        products = result.records
+                        // 根据获取到的搜索结果计算总页码数
+                        totalPages = Math.ceil(result.total / itemsPerPage);
+                        document.getElementById('totalPages').innerText = totalPages;
+                        document.getElementById('currentPage').innerText = currentPage;
+
+                        displayProducts(products);
+                    })
+                    .catch(error => {
+                        console.error('Error searching products:', error);
+                    });
+            }
+
+            // Filter products by category
+            function filterByCategory() {
+                const categoryId = document.getElementById('categoryFilter').value;
+                const filteredProducts = categoryId
+                    ? products.filter(product => product.categoryId === Number(categoryId))
+                    : products;
+                displayProducts(filteredProducts);
+            }
+
+            // Sort products by price
+            function sortProductsByPrice() {
+                const sortValue = document.getElementById('priceSort').value;
+                let sortedProducts = [...products];
+                if (sortValue === 'asc') {
+                    sortedProducts.sort((a, b) => a.price - b.price);
+                } else if (sortValue === 'desc') {
+                    sortedProducts.sort((a, b) => b.price - a.price);
+                }
+                displayProducts(sortedProducts);
+            }
+
+            function prevPage() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    searchProducts()
+                    // const searchUrl = `/api/products/search?keyword=${searchKeyword}&page=${currentPage}&limit=${itemsPerPage}`;
+                    // fetch(searchUrl)
+                    //     .then(response => response.json())
+                    //     .then(filteredProducts => {
+                    //         displayProducts(filteredProducts);
+                    //     })
+                    //     .catch(error => {
+                    //         console.error('Error fetching previous page of search results:', error);
+                    //     });
+                }
+            }
+
+            function nextPage() {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    searchProducts()
+                    // const searchUrl = `/api/products/search?keyword=${searchKeyword}&page=${currentPage}&limit=${itemsPerPage}`;
+                    // fetch(searchUrl)
+                    //     .then(response => response.json())
+                    //     .then(filteredProducts => {
+                    //         displayProducts(filteredProducts);
+                    //     })
+                    //     .catch(error => {
+                    //         console.error('Error fetching next page of search results:', error);
+                    //     });
+                }
+            }
+            
+            window.onload = async function () {
+                await fetchSellers();
+                loadCategories();
+                searchProducts();
+            };
+        </script>
+    </body>
+</html>

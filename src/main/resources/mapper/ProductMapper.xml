@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- src/main/resources/mapper/ProductMapper.xml -->
+<mapper namespace="com.example.mini_amazon.mapper.ProductMapper">
+	<select id="getAllProductIdsNotReview" resultType="com.example.mini_amazon.model.Product">
+		SELECT *
+		FROM products
+		where id in (SELECT DISTINCT oi.product_id
+		             FROM orders o
+			                  JOIN order_items oi ON o.id = oi.order_id
+		             WHERE o.user_id = #{id}
+			           AND oi.product_id NOT IN (SELECT product_id FROM product_reviews WHERE user_id = #{id}))
+	</select>
+
+	<select id="getAllProductIdsReviewed" resultType="com.example.mini_amazon.model.Product">
+		SELECT *
+		FROM products
+		where id in (SELECT DISTINCT oi.product_id
+		             FROM orders o
+			                  JOIN order_items oi ON o.id = oi.order_id
+		             WHERE o.user_id = #{id}
+			           AND oi.product_id IN (SELECT product_id FROM product_reviews WHERE user_id = #{id}))
+	</select>
+</mapper>

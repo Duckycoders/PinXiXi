@@ -1,0 +1,411 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header.header-content {
+    display: flex;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+header button.back-to-menu {
+    background-color: #fff;
+    color: #333;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-right: 20px;
+}
+
+header button.back-to-menu:hover {
+    background-color: #f0f0f0;
+    color: #555;
+}
+
+main {
+    padding: 30px;
+}
+
+/* Filters Section Styles */
+.filters-section {
+    background-color: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.filters-section h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.filters-section.form-control {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filters-section select,
+.filters-section input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #555;
+    transition: border-color 0.3s ease;
+}
+
+.filters-section select:focus,
+.filters-section input[type="text"]:focus {
+    border-color: #007BFF;
+}
+
+.filters-section button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    align-self: flex-end;
+}
+
+.filters-section button:hover {
+    background-color: #0056b3;
+}
+
+/* Product List Section Styles */
+.product-list-section {
+    background-color: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 30px;
+}
+
+.product-list-section h2 {
+    margin-top: 0;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+.product-summary {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-summary:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-summary img {
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+
+.product-summary h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.product-summary p {
+    margin: 0;
+    color: #666;
+    font-size: 16px;
+}
+
+.product-summary button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.product-summary button:hover {
+    background-color: #0056b3;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 40px;
+    border: 1px solid #ccc;
+    width: 50%;
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.modal-content span.close {
+    color: #888;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.modal-content span.close:hover {
+    color: #555;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.modal-content img {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.modal-content p {
+    margin: 0;
+    color: #666;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.modal-content ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.modal-content ul li {
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.modal-content div {
+    margin-bottom: 20px;
+}
+
+.search-filter-sort input {
+    margin: 10px 0;
+}
+
+/* Product Modal Styles */
+#productModal .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+}
+
+#productModal .modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 30px;
+    border: 1px solid #ccc;
+    width: 40%;
+    min-width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+#productModal .modal-content span.close {
+    color: #888;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+#productModal .modal-content span.close:hover {
+    color: #555;
+}
+
+#productModal .modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#productModal .modal-content label {
+    display: block;
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 16px;
+}
+
+#productModal .modal-content input[type="text"],
+#productModal .modal-content input[type="number"],
+#productModal .modal-content textarea,
+#productModal .modal-content select {
+    width: 95%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+    transition: border-color 0.3s ease;
+}
+
+#productModal .modal-content input[type="text"]:focus,
+#productModal .modal-content input[type="number"]:focus,
+#productModal .modal-content textarea:focus,
+#productModal .modal-content select:focus {
+    border-color: #007BFF;
+}
+
+#productModal .modal-content button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 18px;
+    font-weight: bold;
+    width: 100%;
+}
+
+#productModal .modal-content button:hover {
+    background-color: #0056b3;
+}
+
+/* 分页区域整体样式 */
+.pagination-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    gap: 10px; /* 元素之间的间距 */
+}
+
+/* 按钮样式 */
+.pagination-section button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF; /* 蓝色主题按钮颜色 */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* 过渡效果，包括背景色和缩放变换 */
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 按钮阴影效果 */
+}
+
+.pagination-section button:hover {
+    background-color: #0056b3; /* 鼠标悬停时按钮的颜色变化 */
+    transform: scale(1.05); /* 鼠标悬停时按钮稍微放大 */
+}
+
+/* 当前页码和总页码的样式 */
+.pagination-section span {
+    margin: 0 10px;
+    font-size: 16px;
+    color: #333; /* 页码文本颜色 */
+    font-weight: 500; /* 页码文本加粗效果 */
+}
+
+/* 禁用状态下的按钮样式（例如当在第一页时，上一页按钮应禁用） */
+.pagination-section button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none; /* 禁用时不应用缩放变换 */
+}

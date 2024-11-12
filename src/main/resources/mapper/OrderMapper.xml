@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mini_amazon.mapper.OrderMapper">
+
+	<!-- 查询卖家所有订单 -->
+	<select id="getSellerOrders" parameterType="long" resultType="com.example.mini_amazon.model.OrderDTO">
+		SELECT o.id,
+		       u.name AS buyerName,
+		       u.address AS buyerAddress,
+		       o.item_count AS itemCount,
+		       o.status,
+		       o.created_at,
+		       SUM(oi.price * oi.quantity) AS totalAmount
+		FROM orders o
+			     JOIN users u ON o.user_id = u.id
+			     JOIN order_items oi ON o.id = oi.order_id
+			     JOIN products p ON oi.product_id = p.id
+		WHERE p.seller_id = #{sellerId}
+		GROUP BY o.id, u.name, u.address, o.item_count, o.status, o.created_at
+		HAVING SUM(oi.price * oi.quantity) > 0
+		ORDER BY o.created_at DESC
+	</select>
+
+	<!-- 查询订单的详细项 -->
+	<select id="getOrderItems" parameterType="long" resultType="com.example.mini_amazon.model.OrderItemDTO">
+		SELECT p.name AS productName, oi.quantity, oi.price
+        FROM order_items oi
+        JOIN products p ON oi.product_id = p.id
+        WHERE oi.order_id = #{orderId}
+	</select>
+
+	<!-- 将订单标记为已完成 -->
+	<update id="fulfillOrder" parameterType="long">
+		UPDATE orders
+        SET status = 'fulfilled'
+        WHERE id = #{orderId} AND EXISTS (
+            SELECT 1 FROM order_items oi
+            JOIN products p ON oi.product_id = p.id
+            WHERE oi.order_id = #{orderId} AND p.seller_id = #{sellerId}
+        )
+	</update>
+	<select id="findOrdersByUserId" resultType="com.example.mini_amazon.model.OrderDTO">
+		SELECT
+			o.id,
+			u.name AS buyerName,
+			u.address AS buyerAddress,
+			o.item_count AS itemCount,
+			o.status,
+			o.created_at,
+			p.name AS productName,
+			SUM(oi.price * oi.quantity) AS totalAmount
+		FROM
+			orders o
+				JOIN
+			users u ON o.user_id = u.id
+				JOIN
+			order_items oi ON o.id = oi.order_id
+				JOIN
+			products p ON oi.product_id = p.id
+		WHERE
+			u.id = #{userId}
+		GROUP BY
+			o.id, u.name, u.address, o.item_count, o.status, o.created_at, p.name
+		HAVING
+			SUM(oi.price * oi.quantity) > 0
+		ORDER BY
+			o.created_at DESC;
+	</select>
+</mapper>
