@@ -36,3 +36,5 @@ Respiratory link: https://github.com/Duckycoders/PinXiXi
 Video for MS3 already pushed to Github,link:https://github.com/Duckycoders/PinXiXi/blob/main/Pin%20Xixi%20ms3.mp4
 
 Video for MS4 already pushed to Github,link:https://github.com/Duckycoders/PinXiXi/blob/main/ms4.mp4
+
+#### No individual scored is needed.
