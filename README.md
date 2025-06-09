@@ -31,7 +31,7 @@ Shu Pu (Sellers Guru): Enable sellers to update stock, add/remove products, and 
 
 Shanruo Xu (Social Guru): Implement a comprehensive feedback system that allows users to submit, edit, and view reviews for products and sellers.
 
-Respiratory link: https://github.com/Duckycoders/PinXiXi
+Repository link: https://github.com/Duckycoders/PinXiXi
 
 Video for MS3 already pushed to Github,link:https://github.com/Duckycoders/PinXiXi/blob/main/Pin%20Xixi%20ms3.mp4
 
