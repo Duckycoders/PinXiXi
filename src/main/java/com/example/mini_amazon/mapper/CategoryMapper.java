@@ -11,7 +11,9 @@ import java.util.List;
 
 @Mapper
 public interface CategoryMapper {
-    @Select("SELECT * FROM Categories")
+    // Table name should be lower case 'categories'
+    // Using capital 'Categories' will fail on case-sensitive databases
+    @Select("SELECT * FROM categories")
     List<Category> findAll();
 }
 
