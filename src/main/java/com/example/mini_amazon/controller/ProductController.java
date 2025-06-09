@@ -79,7 +79,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public void updateReview(@PathVariable Integer id, @RequestBody Product product) {
+    public void updateProduct(@PathVariable Integer id, @RequestBody Product product) {
         product.setId(id);
         productService.updateProduct(product);
     }
