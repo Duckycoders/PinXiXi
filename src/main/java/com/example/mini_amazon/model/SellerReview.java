@@ -15,6 +15,7 @@ public class SellerReview{
     private Date updatedAt;
 
     public void setId(Integer id) {
+        this.id = id;
     }
 
     // Getters and Setters
