@@ -1,5 +1,7 @@
 # PinXiXi
-Class project for CS316
+Class project for CS316, Duke University 24Fall
+
+Instructor: Prof. Sudeepa Roy
 
 Our choice: Standard Project Option
 
@@ -21,11 +23,11 @@ Shanruo Xu - Social Guru: Handles social features, including user posts, comment
 
 Summary of Contributions Since the Last Milestone:
 
-Weisheng Zhang (Users Guru): Brainstormed and identified the tables and related attributes，that will be used to handle the functionalities related to the Users section of the project.
+Weisheng Zhang (Users Guru): Brainstormed and identified the tables and related attributes that will be used to handle the functionalities related to the Users section of the project.
 
 Zhixuan Lu (Products Guru): The Product table manages information about products, such as their names, descriptions, categories, and prices, enabling the platform to organize, display, and categorize items for sale.
 
-Jiaojiao Zhao (Carts Guru): Oversees cart functionalities, including adding, updating, and removing items, and connect customers, sellers and the webpage timely.
+Jiaojiao Zhao (Carts Guru): Oversees cart functionalities, including adding, updating, and removing items, and connects customers, sellers and the webpage timely.
 
 Shu Pu (Sellers Guru): Enable sellers to update stock, add/remove products, and fulfill orders. Ensure accurate inventory tracking when orders are placed and work with the team to integrate these features smoothly into the system.
 
